@@ -25,6 +25,7 @@ public class ShoppingCartApp {
     private AgregarProductoAlCarritoUseCase agregarProductoAlCarritoUseCase;
     private ConfirmarCompraUseCase confirmarCompraUseCase;
     private EliminarProductoCarritoUseCase eliminarProductoCarritoUseCase;
+    private AumentarDisponibiliadProductoUseCase aumentarDisponibiliadProductoUseCase;
 
     public ShoppingCartApp() {
         productRepository = new InMemoryProductRepository();
@@ -34,6 +35,7 @@ public class ShoppingCartApp {
         agregarProductoAlCarritoUseCase = new AgregarProductoAlCarritoUseCase(productRepository, cartRepository);
         confirmarCompraUseCase = new ConfirmarCompraUseCase(cartRepository, customerRepository, purchaseRepository);
         eliminarProductoCarritoUseCase = new EliminarProductoCarritoUseCase(productRepository, cartRepository);
+        aumentarDisponibiliadProductoUseCase = new AumentarDisponibiliadProductoUseCase(productRepository);
 
         cargarDatosIniciales();
     }
@@ -44,7 +46,8 @@ public class ShoppingCartApp {
                            PurchaseRepository purchaseRepository,
                            AgregarProductoAlCarritoUseCase agregarProductoAlCarritoUseCase,
                            ConfirmarCompraUseCase confirmarCompraUseCase,
-                           EliminarProductoCarritoUseCase eliminarProductoCarritoUseCase) {
+                           EliminarProductoCarritoUseCase eliminarProductoCarritoUseCase,
+                           AumentarDisponibiliadProductoUseCase aumentarDisponibiliadProductoUseCase) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.customerRepository = customerRepository;
@@ -52,6 +55,7 @@ public class ShoppingCartApp {
         this.agregarProductoAlCarritoUseCase = agregarProductoAlCarritoUseCase;
         this.confirmarCompraUseCase = confirmarCompraUseCase;
         this.eliminarProductoCarritoUseCase = eliminarProductoCarritoUseCase;
+        this.aumentarDisponibiliadProductoUseCase = aumentarDisponibiliadProductoUseCase;
     }
 
     private void cargarDatosIniciales() {
@@ -120,6 +124,10 @@ public class ShoppingCartApp {
 
     public OperationResult addProductToCart(int productId) {
         return agregarProductoAlCarritoUseCase.execute(productId);
+    }
+
+    public OperationResult increaseAvailability(int productId) {
+        return aumentarDisponibiliadProductoUseCase.execute(productId);
     }
 
     public OperationResult deleteProductFromCart(int productId) {

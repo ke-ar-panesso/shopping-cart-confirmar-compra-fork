@@ -127,7 +127,15 @@ public class MainView {
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
-            increaseButton.setOnAction(event -> showMessage("Por implementar"));
+            increaseButton.setOnAction(event -> {
+                OperationResult result = shoppingCartApp.increaseAvailability(product.getId());
+
+                if (!result.isSuccess()) {
+                    showMessage(result.getMessage());
+                }
+
+                refreshCatalog();
+            });
 
             addButton.setOnAction(event -> {
                 OperationResult result = shoppingCartApp.addProductToCart(product.getId());
