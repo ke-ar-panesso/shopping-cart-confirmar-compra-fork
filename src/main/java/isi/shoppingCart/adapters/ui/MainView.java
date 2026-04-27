@@ -1,5 +1,7 @@
 package isi.shoppingCart.adapters.ui;
 
+import java.util.List;
+
 import isi.shoppingCart.entities.CartItem;
 import isi.shoppingCart.entities.Customer;
 import isi.shoppingCart.entities.Product;
@@ -16,8 +18,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-
-import java.util.List;
 
 public class MainView {
     private ShoppingCartApp shoppingCartApp;
@@ -153,7 +153,7 @@ public class MainView {
         int i;
 
         for (i = 0; i < items.size(); i++) {
-            CartItem item = items.get(i);
+            final CartItem item = items.get(i);
             HBox row = new HBox(10);
 
             Label nameLabel = new Label(item.getProduct().getName());
@@ -164,7 +164,16 @@ public class MainView {
             Button deleteButton = new Button("\uD83D\uDDD1");
 
             subtractButton.setOnAction(event -> showMessage("Por implementar"));
-            deleteButton.setOnAction(event -> showMessage("Por implementar"));
+            deleteButton.setOnAction(event -> {
+                OperationResult result = shoppingCartApp.deleteProductFromCart(item.getProduct().getId());
+
+                if (!result.isSuccess()) {
+                    showMessage(result.getMessage());
+                }
+
+                refreshCart();
+                refreshCatalog();
+            });
 
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
