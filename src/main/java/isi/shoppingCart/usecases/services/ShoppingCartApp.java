@@ -27,6 +27,7 @@ public class ShoppingCartApp {
     private EliminarProductoCarritoUseCase eliminarProductoCarritoUseCase;
     private AumentarDisponibiliadProductoUseCase aumentarDisponibiliadProductoUseCase;
     private DisminuirCantidadEnElCarritoUseCase disminuirCantidadEnElCarritoUseCase;
+    private VaciarCarritoUseCase vaciarCarritoUseCase;
 
     public ShoppingCartApp() {
         productRepository = new InMemoryProductRepository();
@@ -38,7 +39,7 @@ public class ShoppingCartApp {
         eliminarProductoCarritoUseCase = new EliminarProductoCarritoUseCase(productRepository, cartRepository);
         aumentarDisponibiliadProductoUseCase = new AumentarDisponibiliadProductoUseCase(productRepository);
         disminuirCantidadEnElCarritoUseCase = new DisminuirCantidadEnElCarritoUseCase(cartRepository, productRepository);
-        
+        vaciarCarritoUseCase = new VaciarCarritoUseCase(cartRepository);
         cargarDatosIniciales();
     }
 
@@ -50,7 +51,8 @@ public class ShoppingCartApp {
                            ConfirmarCompraUseCase confirmarCompraUseCase,
                            EliminarProductoCarritoUseCase eliminarProductoCarritoUseCase,
                            AumentarDisponibiliadProductoUseCase aumentarDisponibiliadProductoUseCase,
-                           DisminuirCantidadEnElCarritoUseCase disminuirCantidadEnElCarritoUseCase) {
+                           DisminuirCantidadEnElCarritoUseCase disminuirCantidadEnElCarritoUseCase,
+                           VaciarCarritoUseCase vaciarCarritoUseCase) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.customerRepository = customerRepository;
@@ -60,6 +62,7 @@ public class ShoppingCartApp {
         this.eliminarProductoCarritoUseCase = eliminarProductoCarritoUseCase;
         this.aumentarDisponibiliadProductoUseCase = aumentarDisponibiliadProductoUseCase;
         this.disminuirCantidadEnElCarritoUseCase = disminuirCantidadEnElCarritoUseCase;
+        this.vaciarCarritoUseCase = vaciarCarritoUseCase;
     }
 
     private void cargarDatosIniciales() {
@@ -140,6 +143,10 @@ public class ShoppingCartApp {
 
     public OperationResult decreaseProductQuantityFromCart(int productId) {
         return disminuirCantidadEnElCarritoUseCase.execute(productId);
+    }
+
+    public OperationResult clearCart() {
+        return vaciarCarritoUseCase.execute();
     }
 
     public OperationResult confirmPurchase() {
