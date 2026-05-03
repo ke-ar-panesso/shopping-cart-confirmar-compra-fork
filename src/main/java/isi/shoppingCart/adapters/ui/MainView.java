@@ -171,16 +171,20 @@ public class MainView {
             Button subtractButton = new Button("-");
             Button deleteButton = new Button("\uD83D\uDDD1");
 
-            subtractButton.setOnAction(event -> showMessage("Por implementar"));
+            subtractButton.setOnAction(event -> {
+                OperationResult result = shoppingCartApp.decreaseProductQuantityFromCart(item.getProduct().getId());
+                if (!result.isSuccess()) {
+                    showMessage(result.getMessage());
+                }
+                refreshCart();
+            });
             deleteButton.setOnAction(event -> {
                 OperationResult result = shoppingCartApp.deleteProductFromCart(item.getProduct().getId());
 
                 if (!result.isSuccess()) {
                     showMessage(result.getMessage());
                 }
-
                 refreshCart();
-                refreshCatalog();
             });
 
             Region spacer = new Region();

@@ -26,6 +26,7 @@ public class ShoppingCartApp {
     private ConfirmarCompraUseCase confirmarCompraUseCase;
     private EliminarProductoCarritoUseCase eliminarProductoCarritoUseCase;
     private AumentarDisponibiliadProductoUseCase aumentarDisponibiliadProductoUseCase;
+    private DisminuirCantidadEnElCarritoUseCase disminuirCantidadEnElCarritoUseCase;
 
     public ShoppingCartApp() {
         productRepository = new InMemoryProductRepository();
@@ -36,7 +37,8 @@ public class ShoppingCartApp {
         confirmarCompraUseCase = new ConfirmarCompraUseCase(cartRepository, customerRepository, purchaseRepository);
         eliminarProductoCarritoUseCase = new EliminarProductoCarritoUseCase(productRepository, cartRepository);
         aumentarDisponibiliadProductoUseCase = new AumentarDisponibiliadProductoUseCase(productRepository);
-
+        disminuirCantidadEnElCarritoUseCase = new DisminuirCantidadEnElCarritoUseCase(cartRepository, productRepository);
+        
         cargarDatosIniciales();
     }
 
@@ -47,7 +49,8 @@ public class ShoppingCartApp {
                            AgregarProductoAlCarritoUseCase agregarProductoAlCarritoUseCase,
                            ConfirmarCompraUseCase confirmarCompraUseCase,
                            EliminarProductoCarritoUseCase eliminarProductoCarritoUseCase,
-                           AumentarDisponibiliadProductoUseCase aumentarDisponibiliadProductoUseCase) {
+                           AumentarDisponibiliadProductoUseCase aumentarDisponibiliadProductoUseCase,
+                           DisminuirCantidadEnElCarritoUseCase disminuirCantidadEnElCarritoUseCase) {
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.customerRepository = customerRepository;
@@ -56,6 +59,7 @@ public class ShoppingCartApp {
         this.confirmarCompraUseCase = confirmarCompraUseCase;
         this.eliminarProductoCarritoUseCase = eliminarProductoCarritoUseCase;
         this.aumentarDisponibiliadProductoUseCase = aumentarDisponibiliadProductoUseCase;
+        this.disminuirCantidadEnElCarritoUseCase = disminuirCantidadEnElCarritoUseCase;
     }
 
     private void cargarDatosIniciales() {
@@ -132,6 +136,10 @@ public class ShoppingCartApp {
 
     public OperationResult deleteProductFromCart(int productId) {
         return eliminarProductoCarritoUseCase.execute(productId);
+    }
+
+    public OperationResult decreaseProductQuantityFromCart(int productId) {
+        return disminuirCantidadEnElCarritoUseCase.execute(productId);
     }
 
     public OperationResult confirmPurchase() {

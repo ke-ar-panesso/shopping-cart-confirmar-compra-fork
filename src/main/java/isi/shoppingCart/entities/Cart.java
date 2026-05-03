@@ -55,6 +55,15 @@ public class Cart {
         return 0;
     }
 
+    public void decreaseQuantityByProductId(int productId) {
+        for (int i = 0; i < items.size(); i++) {
+            CartItem item = items.get(i);
+            if (item.getProduct().getId() == productId) {
+                item.decreaseQuantity();
+            }
+        }
+    }
+
     public double getTotal() {
         double total = 0.0;
         int i;
